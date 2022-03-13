@@ -1,0 +1,10 @@
+{
+  "name": "socket_server",
+  "version": "1.0.0",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "express": "^4.17.3",
+    "http": "^0.0.1-security",
+    "socket.io": "^4.4.1"
+  }
+}
