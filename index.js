@@ -12,7 +12,7 @@ io.on('connection', (socket) => {
     axios.get('http://localhost:8000/api/v1/users/me', {headers: {'Authorization': token}})
         .then(res => {
             clients.push({
-                userId: res.data.data.user.id,
+                userId: res.data.data.me.id,
                 socket
             })
 
@@ -25,6 +25,7 @@ io.on('connection', (socket) => {
             console.log(`Client with id ${socket.id} connected`)
         })
         .catch(error => {
+            console.log(`Client with id ${socket.id} error`)
             socket.disconnect()
         })
 })
