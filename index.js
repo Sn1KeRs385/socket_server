@@ -4,12 +4,13 @@ const app = express();
 const http = require('http').createServer(app)
 const io = require('socket.io')(http, {cors: {origin: '*'}});
 const jsonParser = express.json();
+const env = require('dotenv').config().parsed;
 
 let clients = []
 
 io.on('connection', (socket) => {
     const token = socket?.handshake?.query?.Authorization || '';
-    axios.get('http://localhost:8000/api/v1/users/me', {headers: {'Authorization': token}})
+    axios.get(`${env.API_HOST}/api/v1/users/me`, {headers: {'Authorization': token}})
         .then(res => {
             clients.push({
                 userId: res.data.data.me.id,
@@ -19,7 +20,6 @@ io.on('connection', (socket) => {
             socket.on('disconnect', () => {
                 clients = clients.filter(client => client.socket.id !== socket.id)
                 console.log(`Client with id ${socket.id} disconnected`)
-                // clients.splice(clients.indexOf(socket.id), 1)
             })
 
             console.log(`Client with id ${socket.id} connected`)
@@ -49,6 +49,6 @@ app.post("/socket/send-data", jsonParser, function (req, res) {
     res.sendStatus(204);
 });
 
-http.listen(3000, function () {
+http.listen(env.SOCKET_PORT, function () {
     console.log("Сервер ожидает подключения...");
 });
